@@ -1,0 +1,7 @@
+{
+  "name": "i-Report",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

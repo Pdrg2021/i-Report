@@ -1,0 +1,41 @@
+<app-header backButton="/auth" title="RECUPERAR CUENTA"></app-header>
+
+<ion-content>
+
+
+<div class="d-flex-center">
+      <!--CREAMOS UN FORMULARIO PARA LA PAGINA AUTH-->
+      <form [formGroup] = "form" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
+        
+        <app-logo></app-logo>
+        <p class="ion-text-center">Ingresa tu e-mail registrado.</p>
+        <p>Revisa tu correo y sigue las instrucciones.</p>
+
+        
+        <!--UTILIZAMOS UN CUADRO INPUT CREADO EN EL COMPONENTE INPUTS PARA INGRESAR Y REGISTRAR EL EMAIL-->
+        <app-inputs 
+            icon="mail-outline"
+            [control]="form.controls.email" 
+            autocomplete="email"
+            type="email"
+            label="correo"
+        ></app-inputs>
+
+            <div class="validators" *ngIf="form.controls.email.errors && form.controls.email.touched">
+                <div  *ngIf="form.controls.email.errors?.['required']">El correo es requerido</div>
+                <div  *ngIf="form.controls.email.errors?.['email']">El correo no es válido</div>
+            </div>
+       
+
+   <!--UTILIZAMOS UN BOTON PARA INGRESAR Y REGISTRAR EL PASSWORD-->
+        <ion-button expand="block"  mode="ios" class="submit" type="submit" [disabled]="form.invalid">
+            Recuperar
+            <ion-icon slot="start" name="arrow-forward"></ion-icon>
+        </ion-button>
+    
+    </form>
+
+</div>
+
+</ion-content>
+

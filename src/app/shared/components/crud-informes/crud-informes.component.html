@@ -1,0 +1,153 @@
+<app-header [isModal]="true" title="HTML del Componente crud-informes"> </app-header>
+
+<ion-content>
+
+  <form [formGroup]="form" (ngSubmit)="submit()" (keypress.enter)="submit()" class="ion-padding ion-text-center">
+
+    <!-- TABLA DE ENCABEZADO DE INFORME -->
+    <ion-grid class="bordered-grid">
+
+      <!-- FILA 1 -->
+      <ion-row>
+
+        <!-- COORDENADA 1.1 = NOMBRE DE LA INSTALACIÓN PRINCIPAL -->
+        <ion-col size="2">
+          <label>INSTALACIÓN</label>
+        </ion-col>
+        <ion-col size="1" class="minimal">:</ion-col>
+        <ion-col size="3">
+          <ion-select formControlName="instalacion" interface="popover">
+            <ion-select-option *ngFor="let instalacion of instalaciones" [value]="instalacion.nombreInstalacion">
+              {{ instalacion.nombreInstalacion }}
+            </ion-select-option>
+          </ion-select>
+        </ion-col>
+
+        <!-- COORDENADA 1.2 = NOMBRE DEL SISTEMA PRINCIPAL DE LA INSTALACIÓN PRINCIPAL -->
+        <ion-col size="2">
+          <label>SISTEMA</label>
+        </ion-col>
+        <ion-col size="1" class="minimal">:</ion-col>
+        <ion-col size="3">
+          <ion-select formControlName="sistema" interface="popover">
+            <ion-select-option *ngFor="let sistema of sistemas" [value]="sistema.nombreSistema">
+              {{ sistema.nombreSistema }}
+            </ion-select-option>
+          </ion-select>
+        </ion-col>
+      </ion-row>
+
+      <!-- FILA 2 -->
+      <ion-row>
+        
+        <!-- COORDENADA 2.1 = NÚMERO DEL PERMISO DE TRABAJO -->
+        <ion-col size="2">
+          <label>NRO. DE PT </label>
+        </ion-col>
+        <ion-col size="1" class="minimal">:</ion-col>
+        <ion-col size="3">
+          <app-inputs autocomplete="nropt" [control]="form.controls.nroPT" type="text" label="N° de PT"></app-inputs>
+        </ion-col>
+
+        <ion-col size="2">
+          <label>RESPONSABLE</label>
+        </ion-col>
+        <ion-col size="1" class="minimal">:</ion-col>
+        <ion-col size="3">
+          <app-inputs autocomplete="responsable" [control]="form.controls.responsable" type="text"
+            label="Responsable"></app-inputs>
+        </ion-col>
+      </ion-row>
+
+      <!-- FILA 3 -->
+      <ion-row>
+
+        <!-- COORDENADA 3.1 = NÚMERO DE ORDEN DE TRABAJO -->
+        <ion-col size="2">
+          <label>N° de OT</label>
+        </ion-col>
+        <ion-col size="1" class="minimal">:</ion-col>
+        <ion-col size="3">
+          <app-inputs autocomplete="nroot" [control]="form.controls.nroOT" type="text" label="N° de OT"></app-inputs>
+        </ion-col>
+       
+        <!-- COORDENADA 3.2 = FECHA DE EJECUCIÓN -->
+        <ion-col size="2">
+          <label>Fecha de Ejecución</label>
+        </ion-col>
+        <ion-col size="1" class="minimal">:</ion-col>
+        <ion-col size="3">
+          <!-- Botón de DateTime para Fecha de Ejecución -->
+          <ion-datetime-button presentation="date" datetime="fechaejecucion"></ion-datetime-button>
+        </ion-col>
+
+      </ion-row>
+
+      <!-- Fila 4 -->
+      <ion-row>
+        <ion-col size="2">
+          <label>N° de Aviso</label>
+        </ion-col>
+        <ion-col size="1" class="minimal">:</ion-col>
+        <ion-col size="3">
+          <app-inputs autocomplete="nroaviso" [control]="form.controls.nroAviso" type="text"
+            label="N° de Aviso"></app-inputs>
+        </ion-col>
+
+        <ion-col size="2">
+          <label>Fecha de Informe</label>
+        </ion-col>
+        <ion-col size="1" class="minimal">:</ion-col>
+        <ion-col size="3">
+          <!-- Botón de DateTime para Fecha de Informe -->
+          <ion-datetime-button presentation="date" datetime="fechainforme"></ion-datetime-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <!-- Modal para los selectores de fecha -->
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime 
+          id="fechaejecucion"
+          (ionChange)="updateFechaEjecucion($event)"
+          presentation="date">
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>
+
+    <ion-modal [keepContentsMounted]="true">
+      <ng-template>
+        <ion-datetime 
+          id="fechainforme"
+          (ionChange)="updateFechaInforme($event)"
+          presentation="date">
+        </ion-datetime>
+      </ng-template>
+    </ion-modal>>
+
+
+ 
+    <ion-avatar *ngIf="form.value.image">
+      <img [src]="form.value.image" />
+    </ion-avatar>
+
+    <ion-icon  *ngIf="!form.value.image" name="image-outline"></ion-icon>
+
+    <!-- Botón para enviar el formulario -->
+    <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form.invalid">
+      Agregar Reporte
+      <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
+    </ion-button>
+    
+    <!-- Botón para Tomar una Foto en el formulario -->
+    <ion-button (click)="tomarImagen()" expand="block" fill="clear" shape="round">
+      Imagen 1
+    </ion-button>
+    
+    <!-- Botón para console log el formulario-->
+    <ion-button (click)="formconsolelog()" expand="block" fill="clear" shape="round">
+      Console Log
+    </ion-button>
+</form>
+</ion-content>

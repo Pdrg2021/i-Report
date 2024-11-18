@@ -1,0 +1,29 @@
+// .auth-form {
+//     display: flex;
+//     flex-direction: column;
+//     align-items: center;
+//     justify-content: center;
+//     max-width: 500px; /* Ajusta según el tamaño deseado */
+//     margin: auto;
+//     padding: 20px;
+//   }
+  
+//   ion-button.submit {
+//     width: 100%; /* Botón ocupa todo el ancho del formulario */
+//     max-width: 300px; /* Limita el ancho en tablet */
+//     margin-top: 20px;
+//   }
+  
+  ion-button {
+    display: block;
+    width: 100%; /* Botones siempre a lo ancho */
+    max-width: 350px;
+    margin: 10px auto; /* Espaciado uniforme */
+  }
+  
+  
+//   ion-content {
+//     --padding-start: 0px;
+//     --padding-end: 0px;
+//   }
+  

@@ -1,0 +1,42 @@
+.bordered-grid {
+  border-top: 1px solid #ccc;
+  border-bottom: 1px solid #ccc;
+  font-size: 0.85em; /* Tamaño de letra más pequeño */
+}
+
+.bordered-grid ion-row {
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ccc;
+}
+
+.bordered-grid ion-row:last-child {
+  border-bottom: none;
+}
+
+.bordered-grid ion-col {
+  padding: 6px 4px; /* Espacio interno para mejor distribución */
+}
+
+.bordered-grid label {
+  font-weight: bold;
+}
+
+.bordered-grid ion-col.minimal {
+  flex: 0 0 auto; /* Ancho mínimo */
+  width: 10px; /* Ancho específico para la celda de dos puntos */
+  border-left: none; /* Sin borde izquierdo */
+  border-right: none; /* Sin borde derecho */
+  text-align: center;
+}
+
+.bordered-grid ion-col input {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  font-size: 0.85em; /* Tamaño de letra pequeño en los inputs */
+}
+
+.bordered-grid ion-col input:focus {
+  outline: none;
+}

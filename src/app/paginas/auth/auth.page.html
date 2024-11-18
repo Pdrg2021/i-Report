@@ -1,0 +1,60 @@
+<app-header title="L O G I N"></app-header>
+
+<ion-content>
+    <div class="d-flex-center">
+        
+        <!---------------------------------- FORMULARIO PARA LA PAGINA AUTH ---------------------------------->
+         <form [formGroup] = "form_login" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
+            
+            <!-- LOGO DE LA APP. -->
+            <app-logo></app-logo>  
+                
+        <!-- COMPONENTE CUADRO INPUT PARA EMAIL -->
+            <app-inputs 
+                icon="mail-outline"
+                [control]="form_login.controls.email" 
+                autocomplete="false"
+                type="email"
+                label="correo"               
+            ></app-inputs>
+
+            <!-- VALIDADORES PARA CUADRO INPUT DE EMAIL -->
+            <div class="validators" *ngIf="form_login.controls.email.errors && form_login.controls.email.touched">
+                <div  *ngIf="form_login.controls.email.errors?.['required']">El correo de usuario es requerido</div>
+                <div  *ngIf="form_login.controls.email.errors?.['email']">El correo no es válido</div>
+            </div>
+       
+        <!-- COMPONENTE CUADRO INPUT PARA CONTRASEÑA -->
+            <app-inputs
+                icon="lock-closed-outline" 
+                [control]="form_login.controls.password" 
+                type="password"
+                label="contraseña"   
+            ></app-inputs>
+
+            <!-- VALIDADORES PARA CUADRO INPUT DE CONTRASEÑA -->
+            <div class="validators" *ngIf="form_login.controls.password.errors && form_login.controls.password.touched">
+                <div  *ngIf="form_login.controls.password.errors?.['required']">La contraseña es requerida</div>
+            </div>
+ 
+            <!-- HIPERVÍNCULO PARA RECUPERAR CONTRASEÑA -->         
+             <P routerLink="recuperar-pswd" class="ion-text-end">Recuperar Contraseña</P>
+  
+            <!-- BOTON PARA INGRESAR -->
+            <ion-button mode="ios" class="submit" type="submit" [disabled]="form_login.invalid">
+                Ingresar
+                <ion-icon slot="start" name="log-in-outline"></ion-icon>
+            </ion-button>
+          
+    
+            <!-- BOTON PARA REGISTRAR NUEVO USUARIO -->
+            <ion-button mode="ios" routerLink="registro">
+                Registrar nuevo usuario
+                <ion-icon slot="start" name="person-add-outline"></ion-icon>
+            </ion-button>
+            <br />
+            <br />
+        </form>
+    </div>
+</ion-content>
+

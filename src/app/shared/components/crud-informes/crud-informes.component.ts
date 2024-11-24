@@ -1,7 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, Input, input, OnInit } from '@angular/core';
 import { clearAppScopedEarlyEventContract } from '@angular/core/primitives/event-dispatch';
 import { FormBuilder, FormControl, FormGroup,Validators } from '@angular/forms';
+import { Document } from 'src/app/models/document.model';
 import { User } from 'src/app/models/user.model';
+import { HomePage } from 'src/app/paginas/main/home/home.page';
 import { FirebaseService } from 'src/app/services/firebase.service';
 
 import { UtilsService } from 'src/app/services/utils.service';
@@ -13,34 +15,97 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class CRUDInformesComponent  implements OnInit {
 
-form = new FormGroup({
-  instalacion: new FormControl('', [Validators.required]),          // INSTALACIÓN
-  sistema: new FormControl('', [Validators.required]),              // SISTEMA PRINCIPAL DE LA INSTALACIÓN
-  nroPT: new FormControl('', [Validators.required, Validators.min(70000),Validators.pattern('^[0-9]{5}$'),]),          // N° de PT
-  responsable: new FormControl('', [Validators.required]),          // RESPONSABLE DE LA ACTIVIDAD
-  nroOT: new FormControl('', [Validators.required]),                // N° DE ORDEN DE TRABAJO
-  fechaejecucion: new FormControl('', [Validators.required]),       // FECHA DE EJECUCIÓN
-  nroAviso: new FormControl('', [Validators.required]),             // N° DE AVISO
-  fechainforme: new FormControl('', [Validators.required]),         // FECHA DE INFORME
-  image: new FormControl('', [Validators.required]),                //REGISTRO DE IMAGEN
-  // id: new FormControl('', [Validators.required]),   // Fecha de Informe
-});
+  @Input() document: Document;
+  firebaseSvc = inject(FirebaseService);
+  utilsSvc = inject(UtilsService);
+  user = {} as User;
+  resp:User =this.utilsSvc.getFromLocalStorage('user');     //TRAE DE BASE EL USUARIO RESPONSABLE Y NO ES NECESARIO COMPLETARLO
+
+
+// ------------ DEFINICIÓN DE LOS CAMPOS DE FORMULARIO INFORME ------------  
+  form_Informe = new FormGroup({
+    instalacion:    new FormControl(''              , [Validators.required]),               // INSTALACIÓN
+    sistema:        new FormControl(''              , [Validators.required]),               // SISTEMA PRINCIPAL DE LA INSTALACIÓN
+    nroPT:          new FormControl(null            , [Validators.required, 
+                                                      Validators.min(70000), 
+                                                      Validators.pattern('^[0-9]{5}$'),
+                                                                          ]),               // N° de PT
+    responsable:    new FormControl(this.resp.email , [Validators.required]),               // RESPONSABLE DE LA ACTIVIDAD
+    nroOT:          new FormControl(null            , [Validators.required]),               // N° DE ORDEN DE TRABAJO
+    fechaejecucion: new FormControl(null            , [Validators.required]),               // FECHA DE EJECUCIÓN
+    nroAviso:       new FormControl(null            ,                       ),              // N° DE AVISO
+    fechainforme:   new FormControl(null            , [Validators.required]),               // FECHA DE INFORME
+    image:          new FormControl(''              , [Validators.required]),               //REGISTRO DE IMAGEN
+    id:             new FormControl(''              ,                       ),             
+    desfase:        new FormControl(null            ,                       ),
+    textoContexto:  new FormControl(null            ,                       ), 
+    textoRealizado: new FormControl(null            ,                       ), 
+
+    textoObservaciones: new FormControl('Sin Observaciones'),
+    checkbox1: new FormControl(false),
+    checkbox2: new FormControl(false),
+    checkbox3: new FormControl(false),
+    checkbox4: new FormControl(false),
+    checkbox5: new FormControl(false),
+    checkbox6: new FormControl(false),
+    checkbox7: new FormControl(false),
+
+
+  });
+
+//------------ FECHA DE EJECUCIÓN AL FORMULARIO ------------
+  seleccionarFechaEjecucion(event: any) {
+    this.form_Informe.controls.fechaejecucion.setValue(event.detail.value);
+    console.log(this.form_Informe.controls.fechaejecucion.value)
+    this.calculodesfase(); 
+  }
+
+  //------------ FECHA DE INFORME AL FORMULARIO ------------
+  seleccionarFechaInforme(event: any) {
+    this.form_Informe.controls.fechainforme.setValue(event.detail.value); 
+    console.log(this.form_Informe.controls.fechainforme.value)
+    this.calculodesfase(); 
+  }
+
+  //------------ CALCULO DEL DESFASE DE TIEMPO (PARAMETRO DE CALIDAD) ------------
+  calculodesfase(){
+    const fechaEjecucion = this.form_Informe.controls.fechaejecucion.value;
+    console.log(fechaEjecucion)
+
+    const fechaInforme = this.form_Informe.controls.fechainforme.value;
+    console.log(fechaInforme)
+    if (fechaEjecucion && fechaInforme) {
+      const fecha1 = new Date(fechaEjecucion); 
+      const fecha2 = new Date(fechaInforme);   
+
+      const desfase_ms = fecha2.getTime() - fecha1.getTime(); // Diferencia en milisegundos
+      const desfase_dias = Math.round(desfase_ms / 86400000);  // Convertir a días
+
+      this.form_Informe.controls.desfase.setValue(desfase_dias); // Almacenar resultado en el formulario
+      console.log(`Días de desfase: ${desfase_dias}`); // Mostrar en consola
+    } else {
+      console.warn('Ambas fechas deben estar seleccionadas para calcular el desfase.');
+    }
+  }; 
 
 
 
+// ------------ DEFINICIÓN DE LOS CAMPOS DE BD INSTALACIÓN ------------  
 form_Instalacion: FormGroup;
   instalaciones = [
-    { CodInstalacion: 'CL01', nombreInstalacion: 'Colbún' },
-    { CodInstalacion: 'CL02', nombreInstalacion: 'San Clemente' },
-    { CodInstalacion: 'CL03', nombreInstalacion: 'La Mina' },
-    { CodInstalacion: 'CL04', nombreInstalacion: 'Machicura' },
-    { CodInstalacion: 'CL05', nombreInstalacion: 'Chiburgo' },
-    { CodInstalacion: 'CL06', nombreInstalacion: 'San Ignacio' },
+    { CodInstalacion: 'CL01', nombreInstalacion: 'CH Colbún' },
+    { CodInstalacion: 'CL02', nombreInstalacion: 'CH San Clemente' },
+    { CodInstalacion: 'CL03', nombreInstalacion: 'CH La Mina' },
+    { CodInstalacion: 'CL04', nombreInstalacion: 'CH Machicura' },
+    { CodInstalacion: 'CL05', nombreInstalacion: 'CH Chiburgo' },
+    { CodInstalacion: 'CL06', nombreInstalacion: 'CH San Ignacio' },
     { CodInstalacion: 'CL01', nombreInstalacion: 'Complejo Colbún' },
-    { CodInstalacion: 'CL01', nombreInstalacion: 'Riego' },
+    { CodInstalacion: 'CL01', nombreInstalacion: 'CH Riego' },
   ];
+  
 
-  form_Sistema: FormGroup;
+  // ------------ DEFINICIÓN DE LOS CAMPOS DE BD Sistema ------------  
+  form_Sistema: FormGroup
   sistemas = [
     { codSistema: '01', nombreSistema: 'OOHH-Captación-Addución' },
     { codSistema: '0201', nombreSistema: 'Turbina U1' },
@@ -61,33 +126,24 @@ form_Instalacion: FormGroup;
     { codSistema: '1102', nombreSistema: 'SSAA CC' },
   ];
 
-  selectedCentral: string;
 
-  constructor(private fb: FormBuilder) {
-    this.form_Instalacion = this.fb.group({
-      instalaciones: [''],
-    });
-  }
+  // constructor(private fb: FormBuilder) 
+  // {this.form_Instalacion = this.fb.group({ instalaciones: [''],});
+  // this.form_Sistema = this.fb.group({ sistemas: [''],});
+  // }
 
-firebaseSvc = inject(FirebaseService);
-utilsSvc = inject(UtilsService)
 
-user = {} as User;
 //---------------//
 
+//------------ OBTENCIÓN DEL USUARIO EN SERVICIO DESDE LOCALSTORAGE ------------
 ngOnInit() { 
   this.user =this.utilsSvc.getFromLocalStorage('user');
+  if (this.document) {this.form_Informe.patchValue(this.document);   // los datos del documento se inserten en el formulario
   console.log(this.user)
- }
-
- updateFechaEjecucion(event: any) {
-  const fecha = event.detail.value; // Obtiene la fecha seleccionada
-  this.form.controls.fechaejecucion.setValue(fecha); // Actualiza el campo en el formulario
-}
-
-updateFechaInforme(event: any) {
-  const fecha = event.detail.value; // Obtiene la fecha seleccionada
-  this.form.controls.fechainforme.setValue(fecha); // Actualiza el campo en el formulario
+  }
+//  if (this.document){
+//   this.form_Informe.controls.instalacion.patchValue(this.document.instalacion)
+//  }
 }
 
 
@@ -95,7 +151,7 @@ updateFechaInforme(event: any) {
 async tomarImagen() {
   const result = await this.utilsSvc.takePicture('Agregar una Imagen');
   if (result && result.dataUrl) {
-    this.form.controls.image.setValue(result.dataUrl);
+    this.form_Informe.controls.image.setValue(result.dataUrl);
     } else {
       this.utilsSvc.presentToast({
         message: 'No se ha seleccionado ninguna imagen.',
@@ -108,49 +164,111 @@ async tomarImagen() {
     }
 
 
-//-----FUNCION: CARGAR DOCUMENTO ----//
-  async submit() {
-    if (this.form.valid) {
-      let path = `Usuarios/${this.user.uid}/Informe1`;
-      // console.log(path);
+//-----------  NUEVA FUNCIÓN SUBMIT  ------------/
+submit(){ 
+  if (this.form_Informe.valid) {   
+    console.log('Paso 1: submit')   
+                                         //  FORMULARIO VÁLIDO?
+    if (this.document) this.actualizarDocumento();
+    else this.crearDocumento();
+  }
+} 
 
-      const loading = await this.utilsSvc.loading();                //"llama al spinner"//
-      await loading.present();                                      //"mientras la constante loading esté presente"//
+//-----FUNCION: CREAR DOCUMENTO (EX SUBMIT)----//
+  async crearDocumento() {
 
-      //-----FUNCION: subir y obtener la url----//
-      let dataUrl = this.form.value.image;
-      // console.log(dataUrl)
-      let imagePath = `${this.user.uid}/${Date.now()}`;
-      // console.log(imagePath)
-      let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl);
-      // console.log(imageUrl)
+    console.log('FUNCIÓN CREAR DOCUMENTO')
+      let path = `Usuarios/${this.user.uid}/Documentos`;
+      console.log(path);
+      console.log('path')
 
-      this.form.controls.image.setValue(imageUrl);
-      console.log("paso2")
+        const loading = await this.utilsSvc.loading();                        // LLAMA AL SPINNER
+        await loading.present();              
 
-      // delete this.form.value.id;
-      this.firebaseSvc.addDocument(path, this.form.value).then(async res=>{
+      let dataUrl = this.form_Informe.value.image;    
+      console.log(dataUrl)                        // CONVIERTE LA IMAGEN A DATO
+      let imagePath = `${this.user.uid}/${Date.now()}`;   
+      console.log(imagePath)                          // DIRECCIÓN PARA ALMACENAMIENTO EN STORAGE
+      let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl);  //  LLAMA A LA FUNCIÓN PARA SUBIR IMAGEN Y OBTENER URL DEL STORAGE.
+      this.form_Informe.controls.image.setValue(imageUrl);      
+      console.log(imageUrl)              // AGREGA LA URL DEL STORAGE EN EL FORMCONTROL IMAGE
+
+
+      delete this.form_Informe.value.id;
+      console.log('delete')
+      this.firebaseSvc.addDocument(path, this.form_Informe.value).then(async res=>{
+      
+       
+        this.utilsSvc.cerrarModal({success: true})
+       
+
+
+        this.utilsSvc.presentToast({                                          // TOAST DE CREACIÓN EXITOSA DE ELEMENTO
+          message: "Creado Exitosamente",
+          duration: 5000,
+          color: 'success',
+          position: 'middle',
+          icon:  'alert-circle-outline',
+        })
+
+      }).catch(error => {                                                     // CONTROL DE ERRORES 
+            this.utilsSvc.presentToast({                                      // MENSAJE SEGÚN CÓDIGO DE ERROR 
+              message: error.message,                                     
+              duration: 5000,                                         
+              color: 'primary',                                       
+              position: 'middle',                                     
+              icon: 'alert-circle-outline',
+            })
+      
+      }).finally(()=>{
+            loading.dismiss();
+          })
+    }
+  
+
+            
+
+
+
+  //-----FUNCION: ACTUALIZAR DOCUMENTO ----//
+  async actualizarDocumento() {
+    console.log('FUNCION ACTUALIZAR DOCUMENTO')
+
+      let path = `Usuarios/${this.user.uid}/Documentos/${this.document.id}`;
+
+        const loading = await this.utilsSvc.loading();                        // LLAMA AL SPINNER
+        await loading.present();              
+  
+        //-----REGLAS: SUBIR NUEVA IMAGEN Y OBTENER NUEVA URL ----//
+      if (this.form_Informe.value.image !=this.document.image){                 //LA IMAGEN DEL FORMULARIO ES DIFERENTE A LA QUE TENÍA ORIGINALMENTE.
+        console.log('LA IMAGEN DEL FORMULARIO ES DIFERENTE A LA QUE TENIA')
+        let dataUrl = this.form_Informe.value.image;                            // CONVIERTE LA IMAGEN A DATO
+        let imagePath = await this.firebaseSvc.getFilePath(this.document.image);// DIRECCIÓN PARA ALMACENAMIENTO EN STORAGE
+        let imageUrl = await this.firebaseSvc.uploadImage(imagePath, dataUrl);  //  LLAMA A LA FUNCIÓN PARA SUBIR IMAGEN Y OBTENER URL DEL STORAGE.
+        this.form_Informe.controls.image.setValue(imageUrl);                    // AGREGA LA URL DEL STORAGE EN EL FORMCONTROL IMAGE
+      }
+ 
+ 
+      delete this.form_Informe.value.id;
+      this.firebaseSvc.updateDocument(path, this.form_Informe.value).then(async res=>{
         
        
         this.utilsSvc.cerrarModal({success: true})
 
-        this.utilsSvc.presentToast({
-          message: "Creado Exitosamente",
+        this.utilsSvc.presentToast({                                          // TOAST DE CREACIÓN EXITOSA DE ELEMENTO
+          message: "Actualizado Exitosamente",
           duration: 5000,
-          color: 'primary',
+          color: 'success',
           position: 'middle',
-          icon: 'checkmark-cirlce-outline',
+          icon:  'checkmark-circle-outline',
         })
 
-          //----Control de errores de la función---//
-      }).catch(error => {
-            console.log(error);
-            
-            this.utilsSvc.presentToast({                              //Genera mensaje para el Toast Presente // 
-              message: error.message,                                 //Tipo de Toast Presente //    
-              duration: 5000,                                         //Parámetros //
-              color: 'success',                                       //Parámetros //
-              position: 'middle',                                     //Parámetros //
+      }).catch(error => {                                                     // CONTROL DE ERRORES 
+            this.utilsSvc.presentToast({                                      // MENSAJE SEGÚN CÓDIGO DE ERROR 
+              message: error.message,                                     
+              duration: 5000,                                         
+              color: 'primary',                                       
+              position: 'middle',                                     
               icon: 'alert-circle-outline',
             })
       
@@ -158,12 +276,15 @@ async tomarImagen() {
             loading.dismiss();
             })
     }
+ 
+ 
+    formconsolelog(){
+      console.log(this.form_Informe.value);
+    }
+ 
   }
 
 
-  formconsolelog(){
-    console.log(this.form.value);
-  }
-}
+
 
 

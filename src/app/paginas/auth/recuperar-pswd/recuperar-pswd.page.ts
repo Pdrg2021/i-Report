@@ -44,7 +44,7 @@ async submit() {
 
       
     }).catch(error=> {
-      (console.log(error));
+      // (console.log(error));
       this.utilsSvc.presentToast({
         message: error.message,
         duration: 5000,

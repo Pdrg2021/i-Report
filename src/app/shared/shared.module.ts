@@ -10,6 +10,7 @@ import { CRUDInformesComponent } from './components/crud-informes/crud-informes.
 
 
 
+
 @NgModule({
   declarations: [
   // AGREGAMOS NUESTROS COMPONENTES
@@ -17,6 +18,7 @@ import { CRUDInformesComponent } from './components/crud-informes/crud-informes.
     InputsComponent,
     LogoComponent,
     CRUDInformesComponent,
+
     
 
   ],
@@ -28,6 +30,7 @@ import { CRUDInformesComponent } from './components/crud-informes/crud-informes.
       LogoComponent,
       ReactiveFormsModule,
       CRUDInformesComponent,
+
       
   ],
   imports: [

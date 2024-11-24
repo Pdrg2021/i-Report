@@ -26,12 +26,12 @@ export class AuthGuard implements CanActivate {
           if(user)
             
             resolve(true);
-            console.log('Auth resolve true');  
+            // console.log('Auth resolve true');  
         }
         else{
           this.utilsSvc.routerLink('/auth');
             resolve(false);   
-            console.log('Auth resolve false');   
+            // console.log('Auth resolve false');   
         }
       })
     })

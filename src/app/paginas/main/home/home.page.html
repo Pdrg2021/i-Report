@@ -1,13 +1,58 @@
-<app-header [isHome]="true" title="Home">
-
+<!---------- ENCABEZADO ---------->
+<app-header
+  [isHome]="true" 
+  title="Home">
 </app-header>
 
-
+<!---------- CONTENIDO ---------->
 <ion-content>
+  <!---------- LISTA PRINCIPAL  ---------->
+    <ion-list>
+    
+      <!---------- GENERA UN ITEM POR CADA REPORTE QUE EXISTA EN REPORTS  ---------->
+      <ion-item-sliding *ngFor="let item of document">
+        <!---------- ESTRUCTURA DE CADA ITEM MOSTRADO  ---------->
+        <ion-item>
+
+          <ion-label>
+            <div class="name">
+              {{item.instalacion}}  -  {{item.sistema}}  
+            </div>        
+            <div class="data">   
+              OT: {{item.nroOT}}  -  Aviso: {{item.nroAviso}}
+            <br/>
+              {{item.fechaejecucion | date:'yyyy-MM-dd'}}
+            </div>
+          </ion-label>
+
+
+          <ion-buttons slot="end">
+            <!-- BOTON VISUALIZAR (click)="visualizarDocument(item)"-->
+            <ion-button color="primary" fill="clear" >
+              <ion-icon class="option-btn" name="eye-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+      
+            <!-- BOTON EDITAR -->
+            <ion-button color="warning" fill="clear" (click)="agregar_o_actualizar_documento(item)">
+              <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+      
+            <!-- BOTON BORRAR (click)="eliminarDocument(item)" -->
+            <ion-button color="danger" fill="clear" >
+              <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+
+        </ion-item>
+
+      </ion-item-sliding>
+
+    </ion-list>
+
 
 
   <!-- Botón para Nuevo Informe -->
-  <ion-fab (click)="agregarInforme()" vertical="bottom" horizontal="end" slot="fixed">
+  <ion-fab (click)=" agregar_o_actualizar_documento()" vertical="bottom" horizontal="end" slot="fixed">
     <ion-fab-button>
       <ion-icon name="add"></ion-icon>
     </ion-fab-button>

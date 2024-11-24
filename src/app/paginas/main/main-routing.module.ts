@@ -7,7 +7,8 @@ const routes: Routes = [
   {
     path: '',
     component: MainPage
-  },  {
+  },
+  {
     path: 'home',
     loadChildren: () => import('./home/home.module').then( m => m.HomePageModule)
   },
@@ -15,10 +16,7 @@ const routes: Routes = [
     path: 'listado',
     loadChildren: () => import('./listado/listado.module').then( m => m.ListadoPageModule)
   },
-  {
-    path: 'formulario1',
-    loadChildren: () => import('./formulario1/formulario1.module').then( m => m.Formulario1PageModule)
-  }
+  
 
 ];
 

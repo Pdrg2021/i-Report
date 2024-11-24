@@ -43,14 +43,22 @@
   
 
   .image-icon{
-    font-size: 100px;
+    font-size: 200px;
     opacity: 30%;
   }
 
-  ion-avatar{
-    width: 200;
-    height: 160px;
-    --border-radius:15px;
+  .ion-avatar{
+    width: 300px;
+    height: 300px;
+    --border-radius:10px;
     margin: 0 auto;
     
+  }
+
+  .ion-datetime {
+    --background: transparent; /* Fondo transparente del ion-datetime */
+  }
+
+  .justify-textarea {
+    text-align: justify; /* Justifica el texto */
   }

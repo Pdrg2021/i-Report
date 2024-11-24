@@ -1,153 +1,269 @@
 <app-header [isModal]="true" title="HTML del Componente crud-informes"> </app-header>
 
+<ion-toolbar>
+  <ion-title slot="end">Informe Técnico I&C</ion-title>
+</ion-toolbar>
+
+
 <ion-content>
 
-  <form [formGroup]="form" (ngSubmit)="submit()" (keypress.enter)="submit()" class="ion-padding ion-text-center">
+  <form [formGroup]="form_Informe" (ngSubmit)="submit()" (keypress.enter)="submit()"
+    class="ion-padding ion-text-center">
 
-    <!-- TABLA DE ENCABEZADO DE INFORME -->
-    <ion-grid class="bordered-grid">
-
-      <!-- FILA 1 -->
-      <ion-row>
-
-        <!-- COORDENADA 1.1 = NOMBRE DE LA INSTALACIÓN PRINCIPAL -->
-        <ion-col size="2">
-          <label>INSTALACIÓN</label>
-        </ion-col>
-        <ion-col size="1" class="minimal">:</ion-col>
-        <ion-col size="3">
-          <ion-select formControlName="instalacion" interface="popover">
-            <ion-select-option *ngFor="let instalacion of instalaciones" [value]="instalacion.nombreInstalacion">
-              {{ instalacion.nombreInstalacion }}
-            </ion-select-option>
-          </ion-select>
-        </ion-col>
-
-        <!-- COORDENADA 1.2 = NOMBRE DEL SISTEMA PRINCIPAL DE LA INSTALACIÓN PRINCIPAL -->
-        <ion-col size="2">
-          <label>SISTEMA</label>
-        </ion-col>
-        <ion-col size="1" class="minimal">:</ion-col>
-        <ion-col size="3">
-          <ion-select formControlName="sistema" interface="popover">
-            <ion-select-option *ngFor="let sistema of sistemas" [value]="sistema.nombreSistema">
-              {{ sistema.nombreSistema }}
-            </ion-select-option>
-          </ion-select>
-        </ion-col>
-      </ion-row>
-
-      <!-- FILA 2 -->
-      <ion-row>
+    <!-- PRIMERA CARTA DE PRESENTACIÓN -->
+    <ion-card>
+    <!-- PRIMERA CARTA DE PRESENTACIÓN: ENCABEZADO -->
+      <ion-card-header>
+        <ion-card-title>Datos Generales</ion-card-title>
+      </ion-card-header>
+    <!-- PRIMERA CARTA DE PRESENTACIÓN: CONTENIDO -->
+      <ion-card-content>
         
-        <!-- COORDENADA 2.1 = NÚMERO DEL PERMISO DE TRABAJO -->
-        <ion-col size="2">
-          <label>NRO. DE PT </label>
-        </ion-col>
-        <ion-col size="1" class="minimal">:</ion-col>
-        <ion-col size="3">
-          <app-inputs autocomplete="nropt" [control]="form.controls.nroPT" type="text" label="N° de PT"></app-inputs>
-        </ion-col>
+        <ion-grid>
+          <!-- FILA 1 -->
+          <ion-row>
+            <!-- COMPONENTE 1.1: INSTALACIÓN -->
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">Instalación</ion-label>
+                  <ion-select 
+                    formControlName="instalacion" 
+                    placeholder="Elija un elemento" 
+                    interface="popover"
+                    mode="ios">
+                      <ion-select-option 
+                        *ngFor="let item_instalacion of instalaciones" 
+                        [value]="item_instalacion.nombreInstalacion">
+                        {{ item_instalacion.nombreInstalacion }}
+                      </ion-select-option>
+                    </ion-select>
+                </ion-item>
+            </ion-col>
 
-        <ion-col size="2">
-          <label>RESPONSABLE</label>
-        </ion-col>
-        <ion-col size="1" class="minimal">:</ion-col>
-        <ion-col size="3">
-          <app-inputs autocomplete="responsable" [control]="form.controls.responsable" type="text"
-            label="Responsable"></app-inputs>
-        </ion-col>
-      </ion-row>
+            <!-- COMPONENTE 1.2: SISTEMA -->
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">Sistema</ion-label>
+                  <ion-select 
+                    formControlName="sistema"
+                    placeholder="Elija un elemento" 
+                    interface="popover" 
+                    mode="ios">
+                      <ion-select-option 
+                        *ngFor="let item_sistema of sistemas" 
+                        [value]="item_sistema.nombreSistema">
+                        {{ item_sistema.nombreSistema }}
+                      </ion-select-option>
+                  </ion-select>
+                </ion-item>
+            </ion-col>
+          </ion-row>
 
-      <!-- FILA 3 -->
-      <ion-row>
+          <!-- FILA 2 -->
+          <ion-row>
+            <!-- COMPONENTE 2.1: NÚMERO DE PERMISO DE TRABAJO -->
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">N° de PT</ion-label>
+                  <ion-input 
+                  formControlName="nroPT" 
+                  type="number">
+                  </ion-input>
+              </ion-item>
+            </ion-col>
 
-        <!-- COORDENADA 3.1 = NÚMERO DE ORDEN DE TRABAJO -->
-        <ion-col size="2">
-          <label>N° de OT</label>
-        </ion-col>
-        <ion-col size="1" class="minimal">:</ion-col>
-        <ion-col size="3">
-          <app-inputs autocomplete="nroot" [control]="form.controls.nroOT" type="text" label="N° de OT"></app-inputs>
-        </ion-col>
-       
-        <!-- COORDENADA 3.2 = FECHA DE EJECUCIÓN -->
-        <ion-col size="2">
-          <label>Fecha de Ejecución</label>
-        </ion-col>
-        <ion-col size="1" class="minimal">:</ion-col>
-        <ion-col size="3">
-          <!-- Botón de DateTime para Fecha de Ejecución -->
-          <ion-datetime-button presentation="date" datetime="fechaejecucion"></ion-datetime-button>
-        </ion-col>
+            <!-- COMPONENTE 2.2: RESPONSABLE -->
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">Responsable</ion-label>
+                <ion-input formControlName="responsable" type="email" value={{user.email}} ></ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
 
-      </ion-row>
+          <!-- FILA 3 -->
+          <ion-row>
+            <!-- COMPONENTE 3.1: NÚMERO DE ORDEN DE TRABAJO -->
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">N° de OT</ion-label>
+                  <ion-input 
+                  formControlName="nroOT"
+                  type="number">
+                  </ion-input>
+              </ion-item>
+            </ion-col>
+            
+            <!-- COMPONENTE 3.2: FECHA DE EJECUCIÓN -->
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">Fecha de Ejecución</ion-label>
+                  <ion-input 
+                  formControlName="fechaejecucion" 
+                  type="date">
+                </ion-input>
+              </ion-item>
+            </ion-col>
+          </ion-row>
 
-      <!-- Fila 4 -->
-      <ion-row>
-        <ion-col size="2">
-          <label>N° de Aviso</label>
-        </ion-col>
-        <ion-col size="1" class="minimal">:</ion-col>
-        <ion-col size="3">
-          <app-inputs autocomplete="nroaviso" [control]="form.controls.nroAviso" type="text"
-            label="N° de Aviso"></app-inputs>
-        </ion-col>
+          <!-- FILA 4 -->
+          <ion-row>
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">N° de Aviso</ion-label>
+                <ion-input formControlName="nroAviso" type="number"></ion-input>
+              </ion-item>
+            </ion-col>
 
-        <ion-col size="2">
-          <label>Fecha de Informe</label>
-        </ion-col>
-        <ion-col size="1" class="minimal">:</ion-col>
-        <ion-col size="3">
-          <!-- Botón de DateTime para Fecha de Informe -->
-          <ion-datetime-button presentation="date" datetime="fechainforme"></ion-datetime-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
+            <ion-col>
+              <ion-item>
+                <ion-label position="stacked">Fecha de Informe</ion-label>
+                <ion-input formControlName="fechainforme" type="date"  presentation="date"></ion-input>
+            </ion-item>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
 
-    <!-- Modal para los selectores de fecha -->
-    <ion-modal [keepContentsMounted]="true">
-      <ng-template>
-        <ion-datetime 
-          id="fechaejecucion"
-          (ionChange)="updateFechaEjecucion($event)"
-          presentation="date">
-        </ion-datetime>
-      </ng-template>
-    </ion-modal>
+    <!-- SEGUNDO BLOQUE: CONTEXTO Y ANTECEDENTES -->
+    <ion-card>
+      <!-- SEGUNDO BLOQUE: ENCABEZADO -->
+      <ion-card-header>
+        <ion-card-title>Contexto y Antecedentes</ion-card-title>
+      </ion-card-header>
+      
+      <!-- SEGUNDO BLOQUE: CONTENIDO -->
+      <ion-card-content>
+       <!-- CONTEXTO -->
+        <ion-item lines="none">
+          <ion-label position="stacked" class="label-bold small-text">Contexto y Antecedentes de lo encontrado</ion-label>
+            <ion-textarea 
+              formControlName="textoContexto" 
+              auto-grow="true" 
+              type="text"
+              class="auto-adjust-textarea small-textarea justify-textarea"
+              [counter]="true" 
+              maxlength="100">
+            </ion-textarea>
+        </ion-item>
+        
+        <!-- LO REALIZADO -->
+        <ion-item lines="none">
+          <ion-label position="stacked" class="label-bold small-text">Antecedentes de lo realizado</ion-label>
+          <ion-textarea 
+          formControlName="textoRealizado" 
+          type="text"
+          auto-grow="true"
+          class="auto-adjust-textarea small-textarea justify-textarea"
+          [counter]="true" 
+          maxlength="100">
+          </ion-textarea>
+        </ion-item>
+      </ion-card-content>
+    </ion-card>
 
-    <ion-modal [keepContentsMounted]="true">
-      <ng-template>
-        <ion-datetime 
-          id="fechainforme"
-          (ionChange)="updateFechaInforme($event)"
-          presentation="date">
-        </ion-datetime>
-      </ng-template>
-    </ion-modal>>
+    <!-- TERCER BLOQUE: RESUMEN TRAS INTERVENCIÓN -->
+    <ion-card>
+      <!-- TERCER BLOQUE: ENCABEZADO -->
+      <ion-card-header>
+        <ion-card-title>Resumen tras Intervención</ion-card-title>
+      </ion-card-header>
+      
+      <!-- TERCER BLOQUE: CONTENIDO -->
+      <ion-card-content>
+          <!-- NORMALIZADO -->
+          
+            <ion-card-subtitle>¿Equipo Normalizado?</ion-card-subtitle>
+            <br/>
+              
+              <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox1"> Sí </ion-checkbox> <br/>
+              <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox2"> No </ion-checkbox> <br/>
+              <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox3"> c/Obs.</ion-checkbox> <br/>
+              
+             
 
 
+          <ion-item lines="none">
+            <ion-label position="stacked" class="label-bold small-text">Observaciones</ion-label>
+            <ion-textarea 
+            formControlName="textoObservaciones" 
+            value="Sin Observaciones"
+            type="text"
+            auto-grow="true"
+            class="auto-adjust-textarea small-textarea justify-textarea"
+            [counter]="true" 
+            maxlength="100">
+            </ion-textarea>
+          </ion-item>
+        </ion-card-content>
+      </ion-card>
+                
+
+         
+          
+
+
+    <!-- CUARTO BLOQUE: REPUESTOS Y COMPONENTES-->
+    <ion-card>
+      <!-- CUARTO BLOQUE: ENCABEZADO -->
+      <ion-card-header>
+        <ion-card-title>Repuestos y Componentes</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+    
+        <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox4"> Se realizó
+          ajuste(s) de parámetro(s)
+        </ion-checkbox> <br />
+        <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox5"> Se realizó
+          reparacion(es)
+          de componente(s) </ion-checkbox> <br />
+        <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox6">Se Realizó
+          reemplazo de
+          componente(s).</ion-checkbox> <br />
+        <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox7"> Se Implementó
+          Mejoras con nuevo(s) Componente(s)
+        </ion-checkbox> <br />
+    
+      </ion-card-content>
+    </ion-card>
+
+      <!-- QUINTO BLOQUE: REGISTRO FOTOGRÁFICO -->
+       <div>
+   
+        <ion-card-header>
+          <ion-title>Registro Fotográfico</ion-title>
+        </ion-card-header>
+        <ion-avatar label="Imagen1" labelplacement="stacked" class="ion-avatar" *ngIf="form_Informe.value.image"><img [src]="form_Informe.value.image"/></ion-avatar>
+        <ion-icon label="Imagen1" labelplacement="stacked" class="image-icon" (click)="tomarImagen()" *ngIf="!form_Informe.value.image" name="image-outline"></ion-icon> 
+       </div> 
  
-    <ion-avatar *ngIf="form.value.image">
-      <img [src]="form.value.image" />
-    </ion-avatar>
+     
+     
+ 
+   
+                 
 
-    <ion-icon  *ngIf="!form.value.image" name="image-outline"></ion-icon>
+       <div>
+            <!-- Botón para enviar el formulario -->
+            <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form_Informe.invalid">
+              Agregar Reporte
+              <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+            </ion-button>
 
-    <!-- Botón para enviar el formulario -->
-    <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form.invalid">
-      Agregar Reporte
-      <ion-icon slot="end" name="checkmark-circle-outline"></ion-icon>
-    </ion-button>
-    
-    <!-- Botón para Tomar una Foto en el formulario -->
-    <ion-button (click)="tomarImagen()" expand="block" fill="clear" shape="round">
-      Imagen 1
-    </ion-button>
-    
-    <!-- Botón para console log el formulario-->
-    <ion-button (click)="formconsolelog()" expand="block" fill="clear" shape="round">
-      Console Log
-    </ion-button>
-</form>
+            <!-- Botón para Tomar una Foto en el formulario -->
+            <!-- <ion-button (click)="tomarImagen()" expand="block" fill="clear" shape="round">
+              Imagen 1
+            </ion-button> -->
+
+            <!-- Botón para console log el formulario -->
+            <ion-button (click)="formconsolelog()" expand="block" fill="clear" shape="round">
+              Console Log
+            </ion-button>
+       </div>
+
+
+
+  </form>
+
 </ion-content>

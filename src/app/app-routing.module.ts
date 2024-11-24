@@ -23,6 +23,7 @@ const routes: Routes = [
     loadChildren: () => import('./paginas/main/home/home.module').then( m => m.HomePageModule), canActivate:[AuthGuard] 
   },
   
+
 ];
 
 @NgModule({

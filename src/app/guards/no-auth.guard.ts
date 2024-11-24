@@ -22,12 +22,12 @@ export class NoAuthGuard implements CanActivate {
 
         if(!auth) { 
             resolve(true);
-            console.log('NoAuth resolve true');   
+            // console.log('NoAuth resolve true');   
         }
         else{
           this.utilsSvc.routerLink('/main/home');
             resolve(false);   
-            console.log('NoAuth resolve false');  
+            // console.log('NoAuth resolve false');  
         }
       })
     })

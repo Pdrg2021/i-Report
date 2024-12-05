@@ -1,7 +1,5 @@
 export interface Document {
     id              :string,
-
-
     instalacion     : string,
     sistema         : string,
     nroPT           : number,
@@ -28,14 +26,6 @@ export interface Document {
 
     desfase: number,
 
-
-  
-
-
-
-
-
-
-
-
+    iniReport: Date,
+    finReport: Date,
 }

@@ -1,4 +1,4 @@
-<app-header [isModal]="true" title="HTML del Componente crud-informes"> </app-header>
+<app-header [isModal]="true" [title]="document ? 'Actualizar datos de Reporte' : 'Generar nuevo Reporte' "> </app-header>
 
 <ion-toolbar>
   <ion-title slot="end">Informe Técnico I&C</ion-title>
@@ -24,14 +24,14 @@
           <ion-row>
             <!-- COMPONENTE 1.1: INSTALACIÓN -->
             <ion-col>
-              <ion-item>
+              <ion-item [disabled]="readonly" lines="none">
                 <ion-label position="stacked">Instalación</ion-label>
                   <ion-select 
                     formControlName="instalacion" 
                     placeholder="Elija un elemento" 
                     interface="popover"
                     mode="ios">
-                      <ion-select-option 
+                      <ion-select-option
                         *ngFor="let item_instalacion of instalaciones" 
                         [value]="item_instalacion.nombreInstalacion">
                         {{ item_instalacion.nombreInstalacion }}
@@ -42,7 +42,7 @@
 
             <!-- COMPONENTE 1.2: SISTEMA -->
             <ion-col>
-              <ion-item>
+              <ion-item [disabled]="readonly" lines="none">
                 <ion-label position="stacked">Sistema</ion-label>
                   <ion-select 
                     formControlName="sistema"
@@ -63,20 +63,30 @@
           <ion-row>
             <!-- COMPONENTE 2.1: NÚMERO DE PERMISO DE TRABAJO -->
             <ion-col>
-              <ion-item>
+              <ion-item [disabled]="readonly" lines="none">
                 <ion-label position="stacked">N° de PT</ion-label>
                   <ion-input 
-                  formControlName="nroPT" 
-                  type="number">
+                    formControlName="nroPT" 
+                    type="text"
+                    maxlength="5"
+                    min="70000"
+                    placeholder="70000">
                   </ion-input>
+
+                  <ion-text color="danger" *ngIf="form_Informe.get('nroPT').invalid && form_Informe.get('nroPT').touched">
+                  Número de PT Inválido.
+                  </ion-text>
               </ion-item>
             </ion-col>
 
             <!-- COMPONENTE 2.2: RESPONSABLE -->
             <ion-col>
-              <ion-item>
+              <ion-item [disabled]="readonly" lines="none">
                 <ion-label position="stacked">Responsable</ion-label>
-                <ion-input formControlName="responsable" type="email" value={{user.email}} ></ion-input>
+                <ion-input 
+                formControlName="responsable" 
+                ype="email" 
+                value={{user.email}} ></ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -85,23 +95,31 @@
           <ion-row>
             <!-- COMPONENTE 3.1: NÚMERO DE ORDEN DE TRABAJO -->
             <ion-col>
-              <ion-item>
+              <ion-item [disabled]="readonly" lines="none">
                 <ion-label position="stacked">N° de OT</ion-label>
                   <ion-input 
                   formControlName="nroOT"
-                  type="number">
+                  type="text"
+                  maxlength="8"
+                  min="50000000"
+                  placeholder="50000000">
                   </ion-input>
+                  
               </ion-item>
+                <ion-text color="danger" *ngIf="form_Informe.get('nroOT').invalid && form_Informe.get('nroOT').touched">
+                  Número de OT Inválido.
+                </ion-text>
             </ion-col>
             
             <!-- COMPONENTE 3.2: FECHA DE EJECUCIÓN -->
             <ion-col>
-              <ion-item>
+              <ion-item [disabled]="readonly" lines="none">
                 <ion-label position="stacked">Fecha de Ejecución</ion-label>
                   <ion-input 
                   formControlName="fechaejecucion" 
-                  type="date">
-                </ion-input>
+                  type="date"
+                  (ionChange)="seleccionarFechaEjecucion($event)">
+                  </ion-input>
               </ion-item>
             </ion-col>
           </ion-row>
@@ -109,16 +127,31 @@
           <!-- FILA 4 -->
           <ion-row>
             <ion-col>
-              <ion-item>
+              <ion-item [disabled]="readonly" lines="none">
                 <ion-label position="stacked">N° de Aviso</ion-label>
-                <ion-input formControlName="nroAviso" type="number"></ion-input>
-              </ion-item>
+                <ion-input 
+                  [readonly]="readonly"
+                  formControlName="nroAviso" 
+                  type="text"
+                  maxlength="8"
+                  min="10000000"
+                  placeholder="10000000">
+                </ion-input>
+            </ion-item>
+              <ion-text color="danger" *ngIf="form_Informe.get('nroAviso').invalid && form_Informe.get('nroAviso').touched">
+                Número de Aviso Inválido.
+              </ion-text>
             </ion-col>
 
             <ion-col>
-              <ion-item>
+              <ion-item [disabled]="readonly" lines="none">
                 <ion-label position="stacked">Fecha de Informe</ion-label>
-                <ion-input formControlName="fechainforme" type="date"  presentation="date"></ion-input>
+                <ion-input 
+                formControlName="fechainforme" 
+                type="date"  
+                presentation="date"
+                (ionChange)="seleccionarFechaInforme($event)">
+              </ion-input>
             </ion-item>
             </ion-col>
           </ion-row>
@@ -136,7 +169,7 @@
       <!-- SEGUNDO BLOQUE: CONTENIDO -->
       <ion-card-content>
        <!-- CONTEXTO -->
-        <ion-item lines="none">
+        <ion-item lines="none" [disabled]="readonly">
           <ion-label position="stacked" class="label-bold small-text">Contexto y Antecedentes de lo encontrado</ion-label>
             <ion-textarea 
               formControlName="textoContexto" 
@@ -149,15 +182,15 @@
         </ion-item>
         
         <!-- LO REALIZADO -->
-        <ion-item lines="none">
+        <ion-item lines="none" [disabled]="readonly">
           <ion-label position="stacked" class="label-bold small-text">Antecedentes de lo realizado</ion-label>
           <ion-textarea 
-          formControlName="textoRealizado" 
-          type="text"
-          auto-grow="true"
-          class="auto-adjust-textarea small-textarea justify-textarea"
-          [counter]="true" 
-          maxlength="100">
+            formControlName="textoRealizado" 
+            type="text"
+            auto-grow="true"
+            class="auto-adjust-textarea small-textarea justify-textarea"
+            [counter]="true" 
+            maxlength="100">
           </ion-textarea>
         </ion-item>
       </ion-card-content>
@@ -172,19 +205,25 @@
       
       <!-- TERCER BLOQUE: CONTENIDO -->
       <ion-card-content>
-          <!-- NORMALIZADO -->
+          <!-- NORMALIZADO -->              
           
-            <ion-card-subtitle>¿Equipo Normalizado?</ion-card-subtitle>
-            <br/>
-              
-              <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox1"> Sí </ion-checkbox> <br/>
-              <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox2"> No </ion-checkbox> <br/>
-              <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox3"> c/Obs.</ion-checkbox> <br/>
-              
-             
+          <ion-item lines="none" [disabled]="readonly">
+            <ion-label style= "margin-left:5px">El Equipo o Sistema resultó normalizado</ion-label>
+              <input type="checkbox"  alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox1">
+            </ion-item>
+            
+            <ion-item lines="none" [disabled]="readonly">
+              <ion-label style= "margin-left:5px">El Equipo o Sistema se habilitó con observaciones</ion-label>
+              <input type="checkbox"  alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox2">  
+            </ion-item>
+          
+            <ion-item lines="none" [disabled]="readonly">
+              <ion-label style= "margin-left:5px">No se logró habilitar el Equipo o Sistema</ion-label>
+              <input type="checkbox" alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox3">  
+              </ion-item>
 
 
-          <ion-item lines="none">
+          <ion-item lines="none" [disabled]="readonly">
             <ion-label position="stacked" class="label-bold small-text">Observaciones</ion-label>
             <ion-textarea 
             formControlName="textoObservaciones" 
@@ -197,11 +236,7 @@
             </ion-textarea>
           </ion-item>
         </ion-card-content>
-      </ion-card>
-                
-
-         
-          
+      </ion-card>         
 
 
     <!-- CUARTO BLOQUE: REPUESTOS Y COMPONENTES-->
@@ -210,60 +245,83 @@
       <ion-card-header>
         <ion-card-title>Repuestos y Componentes</ion-card-title>
       </ion-card-header>
+       <!-- CUARTO BLOQUE: CONTENIDO -->
       <ion-card-content>
-    
-        <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox4"> Se realizó
-          ajuste(s) de parámetro(s)
-        </ion-checkbox> <br />
-        <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox5"> Se realizó
-          reparacion(es)
-          de componente(s) </ion-checkbox> <br />
-        <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox6">Se Realizó
-          reemplazo de
-          componente(s).</ion-checkbox> <br />
-        <ion-checkbox alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox7"> Se Implementó
-          Mejoras con nuevo(s) Componente(s)
-        </ion-checkbox> <br />
-    
+
+          <ion-item lines="none" [disabled]="readonly">
+            <ion-label style= "margin-left:5px">Se realizó ajuste(s) de parámetro(s)</ion-label>
+              <input  type="checkbox"  alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox4">
+          </ion-item>
+          <ion-item lines="none" [disabled]="readonly">
+            <ion-label style= "margin-left:5px">Se realizó reparacion(es) de componente(s)</ion-label>
+              <input type="checkbox" alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox5">    
+          </ion-item>
+            
+            <ion-item lines="none" [disabled]="readonly">
+              <ion-label style= "margin-left:5px">Se Realizó reemplazo de componente(s) </ion-label>
+              <input type="checkbox"  alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox6">
+            </ion-item>
+            
+            <ion-item lines="none" [disabled]="readonly">
+              <ion-label style= "margin-left:5px">Se Implementó Mejoras con nuevo(s) Componente(s) </ion-label>
+              <input type="checkbox" alignment="start" labelplacement="stacked" slot="start" formControlName="checkbox7">             
+            </ion-item>
+
       </ion-card-content>
     </ion-card>
 
       <!-- QUINTO BLOQUE: REGISTRO FOTOGRÁFICO -->
-       <div>
-   
+      
+      <ion-card>
         <ion-card-header>
           <ion-title>Registro Fotográfico</ion-title>
         </ion-card-header>
-        <ion-avatar label="Imagen1" labelplacement="stacked" class="ion-avatar" *ngIf="form_Informe.value.image"><img [src]="form_Informe.value.image"/></ion-avatar>
-        <ion-icon label="Imagen1" labelplacement="stacked" class="image-icon" (click)="tomarImagen()" *ngIf="!form_Informe.value.image" name="image-outline"></ion-icon> 
-       </div> 
- 
-     
-     
- 
+
+        <ion-card-content>
+          <ion-item [disabled]="readonly" lines="none">
+            <ion-avatar label="Imagen1" labelplacement="stacked" class="ion-avatar" (click)="tomarImagen()" *ngIf="form_Informe.value.image"><img [src]="form_Informe.value.image"/></ion-avatar>
+            <ion-icon label="Imagen1" labelplacement="stacked" class="image-icon" (click)="tomarImagen()" *ngIf="!form_Informe.value.image" name="image-outline"></ion-icon> 
+          </ion-item> 
+          
+        </ion-card-content>
+      </ion-card>    
    
                  
 
        <div>
-            <!-- Botón para enviar el formulario -->
-            <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form_Informe.invalid">
-              Agregar Reporte
-              <ion-icon slot="end" name="checkmark-outline"></ion-icon>
-            </ion-button>
 
-            <!-- Botón para Tomar una Foto en el formulario -->
-            <!-- <ion-button (click)="tomarImagen()" expand="block" fill="clear" shape="round">
-              Imagen 1
+ 
+
+           <ion-item lines="none" *ngIf="edit" >
+            <!-- HABILITADO PARA GUARDAR EN CUALQUIER ESTATUS -->
+             <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form_Informe.invalid">
+               {{document ? 'Actualizar Reporte' : 'Guardar Nuevo Reporte'}}
+               <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+             </ion-button>
+           </ion-item>
+ 
+           <ion-item *ngIf="readonly">
+               <ion-button (click)="generarPDF()" mode="ios" class="ion-margin" type="submit" [disabled]="form_Informe.invalid">
+                 Generar PDF
+                 <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+               </ion-button>
+             </ion-item>
+        
+ 
+             <ion-item *ngIf="readonly">
+               <ion-button (click)="formconsolelog()" mode="ios" class="ion-margin" type="submit" [disabled]="form_Informe.invalid">
+                 Console Log
+                 <ion-icon slot="end" name="checkmark-outline"></ion-icon>
+               </ion-button>
+             </ion-item>
+
+            <!-- Botón para enviar o actualizar el formulario -->
+            <!-- <ion-button mode="ios" class="ion-margin" type="submit" [disabled]="form_Informe.invalid">
+              {{document ? 'Actualizar Reporte' : 'Agregar Reporte'}}
+              <ion-icon slot="end" name="checkmark-outline"></ion-icon>
             </ion-button> -->
 
-            <!-- Botón para console log el formulario -->
-            <ion-button (click)="formconsolelog()" expand="block" fill="clear" shape="round">
-              Console Log
-            </ion-button>
        </div>
-
-
-
-  </form>
+      </form>
 
 </ion-content>

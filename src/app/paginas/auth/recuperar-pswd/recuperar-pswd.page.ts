@@ -12,7 +12,7 @@ import { UtilsService } from 'src/app/services/utils.service';
 export class RecuperarPswdPage implements OnInit {
 
 
-  form = new FormGroup({
+  form_recuperar = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
 
   }) 
@@ -24,12 +24,12 @@ ngOnInit() {
 }
 
 async submit() {
-  if (this.form.valid) {
+  if (this.form_recuperar.valid) {
 
     const loading = await this.utilsSvc.loading();
     await loading.present();
 
-    this.firebaseSvc.sendRecoveryEmail(this.form.value.email).then(res => {
+    this.firebaseSvc.sendRecoveryEmail(this.form_recuperar.value.email).then(res => {
       
       this.utilsSvc.presentToast({
         message: 'Correo de Recuperación enviado con éxito',

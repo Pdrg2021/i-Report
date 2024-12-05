@@ -1,4 +1,5 @@
 import { Component, inject, Input, OnInit } from '@angular/core';
+import { AlertController } from '@ionic/angular';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 
@@ -19,7 +20,7 @@ export class HeaderComponent  implements OnInit {
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService)
 
-  constructor() { }
+  constructor(private alertController: AlertController) {}
 
 
   ngOnInit() {}
@@ -33,49 +34,53 @@ export class HeaderComponent  implements OnInit {
     this.firebaseSvc.signOut();
     }
 
-    public alertSingOut = [
-      {
-        text: 'Cancel',
-        role: 'cancel',
-        handler: () => {
-          // console.log('Alert canceled');
+    async alertSingOut() {
+      const alert = await this.alertController.create({
+        header: 'Confirmar Cierre de Sesión',
+        message: '¿Estás seguro de que deseas cerrar la sesión?',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              }
           },
-      },
-      {
-        text: 'OK',
-        role: 'confirm',
-        handler: () => {
-          this.firebaseSvc.signOut();
-          // console.log('Alert confirmed');
-          },
-        },
-      ];
-  
-    setResult(ev) {
-      // console.log(`Dismissed with role: ${ev.detail.role}`);
-      }
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: () => {
+              this.firebaseSvc.signOut();
+              },
+            },
+          ]
+        });
 
-      
-    public alertCloseModal = [
-      {
-        text: 'Cancel',
-        role: 'cancel',
-        handler: () => {
-          // console.log('Alert canceled');
-          },
-      },
-      {
-        text: 'OK',
-        role: 'confirm',
-        handler: () => {
-          this.utilsSvc.cerrarModal();
-          // console.log('Alert confirmed');
-          },
-        },
-      ];
-  
-    setResult2(ev) {
-      // console.log(`Dismissed with role: ${ev.detail.role}`);
+        await alert.present();
       }
   
+     
+     async alertCloseModal() {
+      const alert = await this.alertController.create({
+        header: 'Confirmar Cierre de Formulario',
+        message: 'Se perderán los cambios no guardados',
+        buttons: [
+          {
+            text: 'Cancel',
+            role: 'cancel',
+            handler: () => {
+              }
+          },
+          {
+            text: 'OK',
+            role: 'confirm',
+            handler: () => {
+              this.cerrarModal() 
+              },
+            },
+          ]
+        });
+        
+        await alert.present();
+      }
+    
   }

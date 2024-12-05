@@ -19,7 +19,7 @@ export class RegistroPage implements OnInit {
       firstname: new FormControl('', [Validators.required, Validators.minLength(4)]),
       lastname: new FormControl('', [Validators.required, Validators.minLength(4)]),
       email: new FormControl('', [Validators.required, Validators.email]),
-      password: new FormControl('', [Validators.required, Validators.minLength(4)]),
+      password: new FormControl('', [Validators.required, Validators.minLength(12)]),
       }) 
 
       displayName: string = ''; // Variable para almacenar la concatenación
@@ -51,18 +51,22 @@ export class RegistroPage implements OnInit {
       const loading = await this.utilsSvc.loading();                // LLAMA AL SPINNER
       await loading.present();                                           
 
+      const { firstname, lastname } = this.form_registro.value;
+      this.displayName = `${firstname || ''} ${lastname || ''}`.trim();
 
-      this.form_registro.valueChanges.subscribe((formValues) => {   //------------ CODIGO PARA GENERAR EL NOMBRE APELLIDO COMO DISPLAYNAME 
-        const { firstname, lastname } = formValues;
-        this.displayName = `${firstname || ''} ${lastname || ''}`.trim();
-      });
+      // this.form_registro.valueChanges.subscribe((formValues) => {   TEST//------------ CODIGO PARA GENERAR EL NOMBRE APELLIDO COMO DISPLAYNAME 
+      //   const { firstname, lastname } = formValues;
+      //   this.displayName = `${firstname || ''} ${lastname || ''}`.trim();
+      // });
+
+      const { uid, ...userData } = this.form_registro.value;    //Elimina el Uid, TEST
       
-      
-      this.firebaseSvc.signUp(this.form_registro.value as User)     // PROMESA DE AUTENTICACIÓN CON LOS DATOS DE FORM_LOGIN COMO MODELO USER
+      this.firebaseSvc.signUp(userData as User)
+      // this.firebaseSvc.signUp(this.form_registro.value as User) TEST    // PROMESA DE AUTENTICACIÓN CON LOS DATOS DE FORM_LOGIN COMO MODELO USER
       .then(async res => {                                          
         await this.firebaseSvc.updateUser(this.displayName)         // ACTUALIZA LA PROPIEDAD DISPLAYNAME DEL USER EN AUTH
             
-        let uid= res.user.uid;                                      // CREA UID Y LE ASIGNA EL UID DEL USUARIO DE LA RESPUESTA
+        const uid= res.user.uid;                                      // CREA UID Y LE ASIGNA EL UID DEL USUARIO DE LA RESPUESTA
         this.form_registro.controls.uid.setValue(uid);              // METE EL UID QUE FUE DEVUELTO POR AUTH EN EL FORMULARIO DE REGISTRO
         this.setUserInfo(uid);                                      // LLAMA A setUserInfo CON EL UID DE FIREBASE//           
       })

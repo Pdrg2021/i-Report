@@ -5,7 +5,7 @@
         
         <!---------------------------------- FORMULARIO PARA LA PAGINA AUTH ---------------------------------->
          <form [formGroup] = "form_login" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
-            
+       <div>
             <!-- LOGO DE LA APP. -->
             <app-logo></app-logo>  
                 
@@ -36,9 +36,18 @@
             <div class="validators" *ngIf="form_login.controls.password.errors && form_login.controls.password.touched">
                 <div  *ngIf="form_login.controls.password.errors?.['required']">La contraseña es requerida</div>
             </div>
- 
-            <!-- HIPERVÍNCULO PARA RECUPERAR CONTRASEÑA -->         
-             <P routerLink="recuperar-pswd" class="ion-text-end">Recuperar Contraseña</P>
+        </div>
+
+        <div>
+            <!-- HIPERVÍNCULO PARA RECUPERAR CONTRASEÑA --> 
+            <ion-item lines="none" >
+                <ion-text slot="end" class="ion-text-end" color="primary" routerLink="recuperar-pswd">
+                    <h6>Recuperar Contraseña</h6>
+                 </ion-text> 
+            </ion-item> 
+        </div>
+       
+
   
             <!-- BOTON PARA INGRESAR -->
             <ion-button mode="ios" class="submit" type="submit" [disabled]="form_login.invalid">
@@ -48,13 +57,14 @@
           
     
             <!-- BOTON PARA REGISTRAR NUEVO USUARIO -->
-            <ion-button mode="ios" routerLink="registro">
+            <ion-button mode="ios" routerLink="/auth/registro">
                 Registrar nuevo usuario
                 <ion-icon slot="start" name="person-add-outline"></ion-icon>
             </ion-button>
             <br />
             <br />
         </form>
+
     </div>
 </ion-content>
 

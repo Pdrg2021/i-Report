@@ -9,29 +9,13 @@
       <ion-back-button *ngIf="backButton" [defaultHref]="backButton"></ion-back-button>
 
       <!-- Botón de Retorno, visible si estoy desde Modal -->
-      <ion-button *ngIf="isModal" id="present-alert1">
+      <ion-button *ngIf="isModal" (click)="alertCloseModal()">
         <ion-icon name="close-circle-outline"></ion-icon>
-          <ion-alert mode="ios"
-            trigger="present-alert1"
-            header="ADVERTENCIA: Cierre de Formulario"
-            subHeader="¿Está Seguro de Cerrar Formulario?"
-            message="Se perderán los datos sin guardar"
-            [buttons]="alertCloseModal"
-            (didDismiss)="setResult2($event)"
-          ></ion-alert>
       </ion-button>
 
       <!-- Botón de logout, visible si estoy desde Home -->
-      <ion-button *ngIf="isHome" id="present-alert2">
+      <ion-button *ngIf="isHome" (click)="alertSingOut()">
         <ion-icon name="arrow-back-outline"></ion-icon>
-          <ion-alert mode="ios"
-            trigger="present-alert2"
-            header="ADVERTENCIA: Cierre de Sesión"
-            subHeader="¿Está Seguro que desea Cerrar Sesión?"
-            message=""
-            [buttons]="alertSingOut"
-            (didDismiss)="setResult($event)"
-          ></ion-alert>
       </ion-button>
 
     </ion-buttons>

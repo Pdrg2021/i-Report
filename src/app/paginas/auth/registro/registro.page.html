@@ -59,6 +59,9 @@
             type="password"
             label="Contraseña"       
         ></app-inputs>
+        <ion-text>
+            <sub>La contraseña debe incluir mayúsculas, minúsculas, números y caracteres especiales</sub>
+        </ion-text>
 
 
             <div class="validators" *ngIf="form_registro.controls.password.errors && form_registro.controls.password.touched">

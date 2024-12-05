@@ -4,10 +4,10 @@ import { createUserWithEmailAndPassword, getAuth, sendPasswordResetEmail, signIn
 import { User } from '../models/user.model';
 
 import { AngularFirestore } from '@angular/fire/compat/firestore'
-import { getFirestore, setDoc, doc, getDoc, addDoc, collection, collectionData, query, updateDoc } from '@angular/fire/firestore'
+import { getFirestore, setDoc, doc, getDoc, addDoc, collection, collectionData, query, updateDoc, deleteDoc } from '@angular/fire/firestore'
 import { UtilsService } from './utils.service';
 import { AngularFireStorage } from '@angular/fire/compat/storage'
-import { getStorage, ref, uploadString, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, uploadString, getDownloadURL, deleteObject } from 'firebase/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -53,8 +53,6 @@ export class FirebaseService {
 
 
 
-
-
   //--------------------------------CRUD BASE DE DATOS CON FIREBASE--------------------------------//
 
   //-----AGREGAR DOCUMENTO EN COLECCIÓN-----//
@@ -77,18 +75,16 @@ export class FirebaseService {
     return updateDoc(doc(getFirestore(), path), data);
   }
 
-  // //-----BORRAR DOCUMENTO EN COLECCIÓN-----//
-  // deleteDocument(path: string, data: any) {
-  //   this.deleteDocument(path, data);
-  // }
+  //-----BORRAR DOCUMENTO EN COLECCIÓN-----//
+  deleteDocument(path: string) {
+    return deleteDoc(doc(getFirestore(),path));
+  } 
 
   //-----OBTENER TODOS LOS DOCUMENTOS DE LA COLECCIÓN-----//
   getCollectionData(path: string, collectionQuery?: any) {
     const ref = collection(getFirestore(), path);
-    return collectionData(query(ref, collectionQuery))
+    return collectionData(query(ref, collectionQuery),{idField: 'id'})   //COMPLEMENTO PARA QUE DEVUELVA TAMBIÉN EL ID.
   }
-
-
 
 
 
@@ -106,6 +102,12 @@ export class FirebaseService {
   async getFilePath(url: string) {
     return ref(getStorage(), url).fullPath
   }
+
+   //------------  BORRAR IMAGEN DEL STORAGE   ------------
+   async deleteImage(path: string) {
+    return deleteObject (ref(getStorage(), path));
+  }
+ 
 
 }
  

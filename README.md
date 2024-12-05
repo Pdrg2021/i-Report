@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Seminario de Licenciatura en Ingeniería (AINC421)
 
 Facultad de Ingeniería
@@ -8,6 +9,17 @@ APLICATIVO WEB Y MÓVIL
     # i-Reportnp
 
 AUTOR
+=======
+AINC421
+Seminario de Licenciatura en Ingeniería
+
+Facultad de Ingeniería
+Ingeniería en Computación e Informática
+
+APLICATIVO WEB Y MÓVIL
+    # i-Report
+
+>>>>>>> 0f7aa753cd1e6055f5de1cf9377f4b5d6554d371
 Nombre	: Pablo Daniel Reyes G.
 Rut		: 10.656.277-6
 Correo		: p.reyesgutirrez@uandresbello.edu
@@ -28,6 +40,7 @@ La plataforma deberá contar con las siguientes funcionalidades:
 •	Funcionalidad de Despliegue de Métricas. (Pendiente)
 
 
+<<<<<<< HEAD
 Desarrollo
 Las Principales dependencias del Código son:
 
@@ -64,3 +77,7 @@ Se adecúa almacenamiento para que los reportes sean accesibles accesibles para 
 --> 
 Pendiente de integrar seguridad para la edición y borrado, borrado previa confirmación y solo por autor.
 Pendiente de integrar ordenamiento por centrales.
+=======
+
+
+>>>>>>> 0f7aa753cd1e6055f5de1cf9377f4b5d6554d371

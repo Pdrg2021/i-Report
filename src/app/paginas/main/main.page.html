@@ -1,0 +1,25 @@
+<app-header>
+</app-header>
+
+<ion-content [fullscreen]="true">
+  <!--BOTON PARA VISUALIZAR LISTADO DE INFORMES-->
+  <ion-button expand="block"  mode="ios" class="submit" (click)="listado()" [disabled]="false">
+  LISTADO
+  <ion-icon slot="start" name="person-add-outline"></ion-icon>
+</ion-button>
+
+<!--BOTON PARA CREAR INFORME DE MTTO AVISOS-->
+<ion-button expand="block"  mode="ios" class="submit"  [disabled]="false">
+ATENCIÓN DE FALLAS
+<ion-icon slot="start" name="person-add-outline"></ion-icon>
+</ion-button>
+
+
+<!--BOTON PARA CREAR INFORME DE MTTO ILR-->
+<ion-button expand="block"  mode="ios" class="submit" type="submit" [disabled]="true">
+INSP. LIMP Y REAPRIETE
+<ion-icon slot="start" name="person-add-outline"></ion-icon>
+</ion-button>
+
+
+</ion-content>

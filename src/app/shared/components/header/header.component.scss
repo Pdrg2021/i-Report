@@ -1,0 +1,27 @@
+// CREO UNA CLASE DE ESTILO LLAMADA "segundalineaHeader" //
+.segundalineaHeader{
+    font-size: 12px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  
+  .header-left {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .header-right {
+    text-align: right;
+    white-space: nowrap; /* Para evitar que el texto se divida en varias líneas */
+    margin-left: auto;  /* Empuja el contenido a la derecha */
+
+  }
+
+  .email-text {
+    font-size: 12px;
+  }

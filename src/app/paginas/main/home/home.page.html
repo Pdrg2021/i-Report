@@ -1,0 +1,62 @@
+<!---------- ENCABEZADO ---------->
+<app-header
+  [isHome]="true" 
+  title="Home">
+</app-header>
+
+<!---------- CONTENIDO ---------->
+<ion-content>
+  <!---------- LISTA PRINCIPAL  ---------->
+    <ion-list>
+    
+      <!---------- GENERA UN ITEM POR CADA REPORTE QUE EXISTA EN REPORTS  ---------->
+      <ion-item-sliding *ngFor="let item of document">
+        <!---------- ESTRUCTURA DE CADA ITEM MOSTRADO  ---------->
+        <ion-item>
+
+          <ion-label>
+            <div>
+              <h1>{{item.instalacion}}</h1>     <h2>{{item.sistema}}</h2> 
+            </div>    
+            <div class="data">   
+              <p>N° OT: {{item.nroOT}}   </p>               
+              <p> N° Aviso: {{item.nroAviso}}</p>
+            <p>F. Ejecución: {{item.fechaejecucion | date:'yyyy-MM-dd'}}</p>
+            <p> Creado por: {{item.responsable}} </p>
+            </div>
+          </ion-label>
+
+
+          <ion-buttons  slot="end">
+            <!-- BOTON PDF -->
+
+            <!-- BOTON VISUALIZAR -->
+            <ion-button  color="success" size="large" fill="solid" slot="icon-only" shape="round" (click)="visualizarDocument(item)">
+              <ion-icon   name="eye"></ion-icon>
+            </ion-button>
+          
+            <!-- BOTON EDITAR -->
+            <ion-button *ngIf="!item.validado" color="primary" size="large" fill="solid" slot="icon-only" shape="round" (click)="agregar_o_actualizar_Documento(item)">
+              <ion-icon name="create"></ion-icon>
+            </ion-button>
+
+            <!-- BOTON BORRAR (click)="eliminarDocument(item)" -->
+            <ion-button *ngIf="!item.validado" color="danger" size="large" fill="solid" slot="icon-only" shape="round" (click)="confirmarBorrado(item)">
+              <ion-icon  name="trash" ></ion-icon>
+            </ion-button>
+         
+          </ion-buttons>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+
+  <!-- Botón para Nuevo Informe Aviso de Falla -->
+  <ion-fab >
+    <ion-fab-button >
+      <ion-icon name="add" (click)=" agregar_o_actualizar_Documento()" vertical="bottom" horizontal="end" slot="fixed"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
+
+  
+</ion-content>

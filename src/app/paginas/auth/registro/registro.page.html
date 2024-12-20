@@ -1,0 +1,82 @@
+<app-header backButton="/auth" title="R E G I S T R O"></app-header>
+
+<ion-content>
+
+
+<div class="d-flex-center">
+      <!--CREAMOS UN FORMULARIO PARA LA PAGINA AUTH-->
+      <form [formGroup] = "form_registro" class="auth-form" (ngSubmit)="submit()" (keypress.enter)="submit()">
+        
+        <app-logo></app-logo>
+
+        <!--UTILIZAMOS UN CUADRO INPUT CREADO EN EL COMPONENTE INPUTS PARA INGRESAR Y REGISTRAR EL NOMBRE -->
+        <app-inputs 
+            icon="person-outline"
+            [control]="form_registro.controls.firstname" 
+            autocomplete="false"
+            type="text"
+            label="Nombre"
+        ></app-inputs>
+    
+            <div class="validators" *ngIf="form_registro.controls.firstname.errors && form_registro.controls.firstname.touched">
+                <div  *ngIf="form_registro.controls.firstname.errors?.['required']">El correo es requerido</div>
+                <div  *ngIf="form_registro.controls.firstname.errors?.['minLength']">Se requieren un mínimo de 2 caracteres</div>
+            </div>
+
+        <!--UTILIZAMOS UN CUADRO INPUT CREADO EN EL COMPONENTE INPUTS PARA INGRESAR Y REGISTRAR EL APELLIDO -->
+        <app-inputs 
+            icon="person-outline"
+            [control]="form_registro.controls.lastname" 
+            autocomplete="false"
+            type="text"
+            label="Apellido"
+        ></app-inputs>
+    
+            <div class="validators" *ngIf="form_registro.controls.lastname.errors && form_registro.controls.lastname.touched">
+                <div  *ngIf="form_registro.controls.lastname.errors?.['required']">El correo es requerido</div>
+                <div  *ngIf="form_registro.controls.lastname.errors?.['minLength']">Se requieren un mínimo de 2 caracteres</div>
+            </div>
+        
+        <!--UTILIZAMOS UN CUADRO INPUT CREADO EN EL COMPONENTE INPUTS PARA INGRESAR Y REGISTRAR EL EMAIL-->
+        <app-inputs 
+            icon="mail-outline"
+            [control]="form_registro.controls.email" 
+            autocomplete="false"
+            type="email"
+            label="Correo"
+        ></app-inputs>
+
+            <div class="validators" *ngIf="form_registro.controls.email.errors && form_registro.controls.email.touched">
+                <div  *ngIf="form_registro.controls.email.errors?.['required']">El correo es requerido</div>
+                <div  *ngIf="form_registro.controls.email.errors?.['email']">El correo no es válido</div>
+            </div>
+       
+
+        <!--UTILIZAMOS UN CUADRO INPUT CREADO EN EL COMPONENTE INPUTS PARA INGRESAR Y REGISTRAR EL PASSWORD-->
+        <app-inputs
+            icon="lock-closed-outline" 
+            [control]="form_registro.controls.password" 
+            type="password"
+            label="Contraseña"       
+        ></app-inputs>
+        
+        <ion-text>
+            <sub>La contraseña debe incluir mayúsculas, minúsculas, números y caracteres especiales</sub>
+        </ion-text>
+
+
+            <div class="validators" *ngIf="form_registro.controls.password.errors && form_registro.controls.password.touched">
+                <div  *ngIf="form_registro.controls.password.errors?.['required']">La contraseña es requerida</div>
+                <div  *ngIf="form_registro.controls.password.errors?.['required']">La contraseña debe incluir mayúsculas, minúsculas, números y caracteres especiales</div>
+            </div>
+
+   <!--UTILIZAMOS UN BOTON PARA INGRESAR Y REGISTRAR EL PASSWORD-->
+        <ion-button expand="block"  mode="ios" class="submit" type="submit" [disabled]="form_registro.invalid">
+          Registrar
+          <ion-icon slot="start" name="person-add-outline"></ion-icon>
+        </ion-button>
+    
+    </form>
+
+</div>
+</ion-content>

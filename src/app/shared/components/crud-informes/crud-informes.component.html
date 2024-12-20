@@ -311,7 +311,7 @@
              <ion-icon slot="end" name="checkmark-outline"></ion-icon>
            </ion-button>
 
-           <ion-button  *ngIf="!this.document.validado"(click)="validar()" mode="ios" class="ion-margin" type="button" [disabled]="form_Informe.invalid">
+           <ion-button  *ngIf="!this.document.validado"(click)="alertvalidar()" mode="ios" class="ion-margin" type="button" [disabled]="form_Informe.invalid">
             Validar y Enviar Informe
             <ion-icon slot="end" name="mail-outline"></ion-icon>
           </ion-button>

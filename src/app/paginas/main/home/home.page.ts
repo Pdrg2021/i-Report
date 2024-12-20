@@ -132,8 +132,8 @@ export class HomePage implements OnInit {
 
     async confirmarBorrado(item: any) {
       const alert = await this.alertController.create({
-        header: 'Confirmar Borrado',
-        message: '¿Estás seguro de que deseas borrar este documento?',
+        header: 'Solicitud de Borrado',
+        message: '¿Está seguro de borrar el documento?',
         buttons: [
           {
             text: 'Cancelar',

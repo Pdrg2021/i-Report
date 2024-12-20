@@ -21,9 +21,11 @@ export class HeaderComponent  implements OnInit {
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService)
   user:User=null;
+  alertController = inject(AlertController);
+
        //TRAE DE BASE EL USUARIO 
 
-  constructor(private alertController: AlertController) {}
+  constructor() {}
 
 
   ngOnInit() {
@@ -41,8 +43,8 @@ export class HeaderComponent  implements OnInit {
 
     async alertSingOut() {
       const alert = await this.alertController.create({
-        header: 'Confirmar Cierre de Sesión',
-        message: '¿Estás seguro de que deseas cerrar la sesión?',
+        header: 'Cierre de Sesión',
+        message: '¿Confirma Cierre de Sesión?',
         buttons: [
           {
             text: 'Cancel',
@@ -66,8 +68,8 @@ export class HeaderComponent  implements OnInit {
      
      async alertCloseModal() {
       const alert = await this.alertController.create({
-        header: 'Confirmar Cierre de Formulario',
-        message: 'Se perderán los cambios no guardados',
+        header: 'Cierre de Formulario',
+        message: '¿Confirma Cierre de Formulario?',
         buttons: [
           {
             text: 'Cancel',

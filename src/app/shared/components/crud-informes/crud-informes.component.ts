@@ -5,9 +5,11 @@ import { User } from 'src/app/models/user.model';
 import { FirebaseService } from 'src/app/services/firebase.service';
 import { UtilsService } from 'src/app/services/utils.service';
 
+
 //IMPORTACIONES PARA LA FUNCIÓN CREAR PDF
 import * as pdfMake from "pdfmake/build/pdfmake";
 import "pdfmake/build/vfs_fonts"; // Carga las fuentes predeterminadas automáticamente
+import { AlertController } from '@ionic/angular';
 
 // import pdfMake from "pdfmake/build/pdfmake";
 // import * as pdfFonts from 'pdfmake/build/vfs_fonts';
@@ -24,6 +26,7 @@ export class CRUDInformesComponent  implements OnInit {
 
   firebaseSvc = inject(FirebaseService);
   utilsSvc = inject(UtilsService);
+   alertController = inject(AlertController);
 
   user = {} as User;
   resp:User =this.utilsSvc.getFromLocalStorage('user');     //TRAE DE BASE EL USUARIO RESPONSABLE Y NO ES NECESARIO COMPLETARLO
@@ -125,7 +128,7 @@ async tomarImagen() {
     this.form_Informe.controls.image.setValue(result.dataUrl);
     } else {
       this.utilsSvc.presentToast({
-        message: 'No se ha seleccionado ninguna imagen.',
+        message: 'No se ha seleccionado ninguna imágen.',
         duration: 5000,
         color: 'danger',
         position: 'bottom',
@@ -172,7 +175,7 @@ async crearDocumento() {
     this.firebaseSvc.addDocument(path, this.form_Informe.value).then(async res=>{     
       this.utilsSvc.cerrarModal({success: true})
       this.utilsSvc.presentToast({                                          // TOAST DE CREACIÓN EXITOSA DE ELEMENTO
-        message: "Creado Exitosamente",
+        message: "Creado Exitósamente",
         duration: 5000,
         color: 'success',
         position: 'middle',
@@ -217,7 +220,7 @@ async actualizarDocumento() {
       this.utilsSvc.cerrarModal({success: true})
 
       this.utilsSvc.presentToast({                                          // TOAST DE CREACIÓN EXITOSA DE ELEMENTO
-        message: "Actualizado Exitosamente",
+        message: "Actualizado Exitósamente",
         duration: 5000,
         color: 'success',
         position: 'middle',
@@ -367,7 +370,7 @@ async urlToBase64(url: string): Promise<string> {
               body: [
                 [{text: 'Desfase de Informe (Fecha Reporte - Fecha Ejecución) ', fillColor: '#f0f0f0', fontSize: 10 }],
                 [{text: formData.desfase || 'Sin información.' + 'días de desfase', fontSize: 10}],
-                [{text: 'Edad de Informe (Fecha de Generación PDF - Fecha de Creación o última actualización)  ', fillColor: '#f0f0f0', fontSize: 10 }],
+                [{text: 'Edad de Informe (Fecha de Generación PDF - Fecha de Validación)  ', fillColor: '#f0f0f0', fontSize: 10 }],
                 [{text:formData.edadReport || 'Sin información.' + 'Tiempo de Vida del Documento', fontSize: 10}]
               ],
             },
@@ -455,6 +458,8 @@ setiniReport(): void {
 
 //------------     2.2.- FECHA DE FIN DE REPORTE Y CALCULO DE EDAD AL GENERAR PDF    ------------
 calculoedad() {
+  if(!this.document.validado)
+  {
   const fecha5 = this.form_Informe.controls.iniReport.value;
   const fecha4 = new Date();
   this.form_Informe.controls.finReport.setValue(fecha4);
@@ -479,6 +484,35 @@ calculoedad() {
     console.error('Error Formato fechas');
   }
 }
+}
+
+
+async alertvalidar() {
+  const alert = await this.alertController.create({
+    header: 'Validar Formulario',
+    subHeader: 'Bloqueo a la edición',
+    message: '¿Confirma Validar Formulario?',
+    buttons: [
+      {
+        text: 'Cancel',
+        role: 'cancel',
+        handler: () => {
+          }
+      },
+      {
+        text: 'OK',
+        role: 'confirm',
+        handler: () => {
+          this.validar() 
+          },
+        },
+      ]
+    });
+    
+    await alert.present();
+  }
+
+
 
 validar(){
   console.log(this.document.validado);

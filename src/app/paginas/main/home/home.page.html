@@ -50,13 +50,11 @@
       </ion-item-sliding>
     </ion-list>
 
-  <!-- Botón para Nuevo Informe Aviso de Falla -->
-  <ion-fab >
-    <ion-fab-button >
-      <ion-icon name="add" (click)=" agregar_o_actualizar_Documento()" vertical="bottom" horizontal="end" slot="fixed"></ion-icon>
-    </ion-fab-button>
-  </ion-fab>
-
-
-  
-</ion-content>
+    <!-- Botón para Nuevo Informe -->
+    <ion-fab (click)=" agregar_o_actualizar_Documento()" vertical="bottom" horizontal="end" slot="fixed">
+      <ion-fab-button>
+        <ion-icon name="add"></ion-icon>
+      </ion-fab-button>
+    </ion-fab>
+    
+  </ion-content>
